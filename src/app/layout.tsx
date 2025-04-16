@@ -1,4 +1,5 @@
-import "./globals.css";
+// src/app/layout.tsx
+import "../styles/globals.css"; // Corrected path
 import { authOptions } from "./api/auth/[...nextauth]/route";
 import { getServerSession } from "next-auth";
 

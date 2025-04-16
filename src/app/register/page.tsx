@@ -1,13 +1,13 @@
-// src/app/register/page.tsx
 import { supabase } from "@/lib/db";
+import bcrypt from "bcrypt";
 
 export default function Register() {
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     const email = (e.target as any).email.value;
-    const password = (e.target as any).password.value;
+    const password = bcrypt.hashSync((e.target as any).password.value, 10);
     const name = (e.target as any).name.value;
-    await supabase.from("users").insert({ email, password, name }); // Hash password in production
+    await supabase.from("users").insert({ email, password, name });
   };
 
   return (

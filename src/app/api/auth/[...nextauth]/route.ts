@@ -1,7 +1,7 @@
-// src/app/api/auth/[...nextauth]/route.ts
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { supabase } from "@/lib/db";
+import bcrypt from "bcrypt";
 
 export const authOptions = {
   providers: [
@@ -17,8 +17,10 @@ export const authOptions = {
           .select("*")
           .eq("email", credentials?.email)
           .single();
-        if (data && credentials?.password === data.password) {
-          // Replace with proper hashing in production
+        if (
+          data &&
+          bcrypt.compareSync(credentials?.password || "", data.password)
+        ) {
           return { id: data.id, name: data.name, email: data.email };
         }
         return null;
@@ -28,6 +30,7 @@ export const authOptions = {
   pages: {
     signIn: "/login",
   },
+  secret: process.env.NEXTAUTH_SECRET, // Add to .env.local
 };
 
 const handler = NextAuth(authOptions);
