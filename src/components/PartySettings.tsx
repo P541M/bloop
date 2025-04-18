@@ -49,7 +49,7 @@ export default function PartySettings({ party, isHost }: PartySettingsProps) {
         throw new Error(data.error || "Failed to update party");
       }
 
-      setSuccess("Party settings updated successfully!");
+      setSuccess("Party settings updated successfully! 🎉");
       router.refresh();
     } catch (err) {
       console.error("Error updating party:", err);
@@ -92,27 +92,33 @@ export default function PartySettings({ party, isHost }: PartySettingsProps) {
   }
 
   return (
-    <div className="card p-6 mb-6">
-      <h2 className="text-xl font-semibold mb-4">Edit Party Settings</h2>
+    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 mb-6 border-2 border-purple-100 dark:border-purple-900">
+      <div className="flex items-center space-x-3 mb-6">
+        <span className="text-3xl">⚙️</span>
+        <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">Party Settings</h2>
+      </div>
       
-      <form onSubmit={handleUpdate} className="space-y-4">
+      <form onSubmit={handleUpdate} className="space-y-6">
         {error && (
-          <div className="p-3 text-sm text-red-500 bg-red-50 rounded-md">
-            {error}
+          <div className="p-4 text-sm text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 rounded-xl flex items-center">
+            <span className="text-xl mr-2">😅</span>
+            <span>{error}</span>
           </div>
         )}
         
         {success && (
-          <div className="p-3 text-sm text-green-500 bg-green-50 rounded-md">
-            {success}
+          <div className="p-4 text-sm text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20 rounded-xl flex items-center">
+            <span className="text-xl mr-2">🎉</span>
+            <span>{success}</span>
           </div>
         )}
         
         <div className="space-y-2">
           <label
             htmlFor="name"
-            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            className="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center"
           >
+            <span className="mr-2">🎪</span>
             Party Name
           </label>
           <input
@@ -121,33 +127,35 @@ export default function PartySettings({ party, isHost }: PartySettingsProps) {
             onChange={(e) => setName(e.target.value)}
             type="text"
             required
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Enter party name"
+            className="w-full px-4 py-3 border-2 border-purple-200 dark:border-purple-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100"
+            placeholder="Enter a fun party name!"
             disabled={loading}
           />
         </div>
 
-        <div className="space-y-2">
-          <label className="text-sm font-medium leading-none">
+        <div className="space-y-4">
+          <label className="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center">
+            <span className="mr-2">🎮</span>
             Party Settings
           </label>
-          <div className="space-y-4">
-            <div className="flex items-center space-x-2">
+          <div className="space-y-4 bg-gray-50 dark:bg-gray-700/50 p-4 rounded-xl">
+            <div className="flex items-center space-x-3">
               <input
                 type="checkbox"
                 id="hostParticipates"
                 checked={hostParticipates}
                 onChange={(e) => setHostParticipates(e.target.checked)}
-                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                className="w-5 h-5 rounded border-purple-300 text-purple-600 focus:ring-purple-500"
                 disabled={loading}
               />
-              <label htmlFor="hostParticipates" className="text-sm">
-                Participate as host
+              <label htmlFor="hostParticipates" className="text-sm text-gray-700 dark:text-gray-300">
+                Join the fun as host! 🎭
               </label>
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="playerLimit" className="text-sm">
+              <label htmlFor="playerLimit" className="text-sm text-gray-700 dark:text-gray-300 flex items-center">
+                <span className="mr-2">👥</span>
                 Player Limit (optional)
               </label>
               <input
@@ -156,47 +164,48 @@ export default function PartySettings({ party, isHost }: PartySettingsProps) {
                 min="1"
                 value={playerLimit || ''}
                 onChange={(e) => setPlayerLimit(e.target.value ? parseInt(e.target.value) : null)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="No limit"
+                className="w-full px-4 py-3 border-2 border-purple-200 dark:border-purple-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100"
+                placeholder="No limit - the more the merrier!"
                 disabled={loading}
               />
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="missionHandling" className="text-sm">
-                Mission Handling
+              <label htmlFor="missionHandling" className="text-sm text-gray-700 dark:text-gray-300 flex items-center">
+                <span className="mr-2">🎯</span>
+                Mission Style
               </label>
               <select
                 id="missionHandling"
                 value={missionHandling}
                 onChange={(e) => setMissionHandling(e.target.value as 'repeat' | 'generate' | 'custom')}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-3 border-2 border-purple-200 dark:border-purple-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100"
                 disabled={loading}
               >
-                <option value="repeat">Repeat missions if needed</option>
-                <option value="generate">Generate new missions</option>
-                <option value="custom">Allow custom missions</option>
+                <option value="repeat">🔄 Repeat missions if needed</option>
+                <option value="generate">✨ Generate new missions</option>
+                <option value="custom">🎨 Allow custom missions</option>
               </select>
             </div>
           </div>
         </div>
         
-        <div className="flex space-x-4">
+        <div className="flex space-x-4 pt-4">
           <button
             type="submit"
             disabled={loading}
-            className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex-1 bg-gradient-to-r from-purple-600 to-pink-500 text-white py-3 px-6 rounded-xl hover:shadow-lg transform hover:scale-105 transition-all focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
           >
-            {loading ? "Updating..." : "Update Party"}
+            {loading ? "Updating... ⏳" : "Save Changes ✨"}
           </button>
           
           <button
             type="button"
             onClick={handleDelete}
             disabled={loading}
-            className="flex-1 bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex-1 bg-gradient-to-r from-red-600 to-pink-500 text-white py-3 px-6 rounded-xl hover:shadow-lg transform hover:scale-105 transition-all focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
           >
-            {loading ? "Deleting..." : "Delete Party"}
+            {loading ? "Deleting... ⏳" : "Delete Party 🗑️"}
           </button>
         </div>
       </form>

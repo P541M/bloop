@@ -4,6 +4,7 @@ interface MissionCardProps {
   points: number;
   dueDate?: string;
   onClick?: () => void;
+  category?: string;
 }
 
 export default function MissionCard({ 
@@ -11,40 +12,61 @@ export default function MissionCard({
   status, 
   points, 
   dueDate,
-  onClick 
+  onClick,
+  category = 'fun'
 }: MissionCardProps) {
   const statusColors = {
-    pending: 'bg-yellow-100 text-yellow-800 border-yellow-200',
-    completed: 'bg-green-100 text-green-800 border-green-200',
-    failed: 'bg-red-100 text-red-800 border-red-200'
+    pending: 'bg-gradient-to-r from-yellow-400 to-orange-400',
+    completed: 'bg-gradient-to-r from-green-400 to-emerald-400',
+    failed: 'bg-gradient-to-r from-red-400 to-pink-400'
+  };
+
+  const statusIcons = {
+    pending: '🎯',
+    completed: '🎉',
+    failed: '😅'
   };
 
   const statusLabels = {
     pending: 'In Progress',
-    completed: 'Completed',
+    completed: 'Completed!',
     failed: 'Failed'
+  };
+
+  const categoryEmojis: { [key: string]: string } = {
+    fun: '🎮',
+    social: '👥',
+    creative: '🎨',
+    dance: '💃',
+    photo: '📸',
+    challenge: '🏆'
   };
 
   return (
     <div 
-      className={`rounded-lg shadow-md p-5 border-2 ${statusColors[status]} hover:shadow-lg transition-shadow cursor-pointer`}
+      className={`rounded-2xl shadow-lg p-6 border-2 border-transparent hover:border-purple-200 dark:hover:border-purple-800 transition-all transform hover:-translate-y-1 cursor-pointer bg-white dark:bg-gray-800`}
       onClick={onClick}
     >
-      <div className="flex justify-between items-start mb-3">
-        <h3 className="font-semibold text-lg">{description}</h3>
-        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+      <div className="flex justify-between items-start mb-4">
+        <div className="flex items-center space-x-3">
+          <span className="text-2xl">{categoryEmojis[category] || '🎯'}</span>
+          <h3 className="font-semibold text-lg text-gray-800 dark:text-gray-100">{description}</h3>
+        </div>
+        <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-md">
           {points} pts
         </span>
       </div>
       
       <div className="flex justify-between items-center mt-4">
-        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium`}>
+        <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${statusColors[status]} text-white shadow-sm`}>
+          <span className="mr-2">{statusIcons[status]}</span>
           {statusLabels[status]}
         </span>
         
         {dueDate && (
-          <span className="text-sm text-gray-500">
-            Due: {dueDate}
+          <span className="text-sm text-gray-500 dark:text-gray-400 flex items-center">
+            <span className="mr-1">⏰</span>
+            {dueDate}
           </span>
         )}
       </div>
