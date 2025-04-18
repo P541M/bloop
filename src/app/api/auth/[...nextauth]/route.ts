@@ -95,6 +95,13 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       if (session.user) {
         session.user.id = token.id as string;
+        
+        // Log the session for debugging
+        console.log("Session created:", {
+          userId: session.user.id,
+          userName: session.user.name,
+          userEmail: session.user.email
+        });
       }
       return session;
     },

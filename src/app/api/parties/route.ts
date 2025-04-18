@@ -23,12 +23,9 @@ export async function POST(req: Request) {
       return Response.json({ error: "Party name is required" }, { status: 400 });
     }
 
-    console.log("Creating party with data:", {
-      name,
-      host_id: session.user.id,
-      party_code: Math.random().toString(36).substring(2, 8).toUpperCase(),
-      status: "active",
-    });
+    if (!session.user.id) {
+      return Response.json({ error: "User ID is required" }, { status: 400 });
+    }
 
     const partyCode = Math.random().toString(36).substring(2, 8).toUpperCase();
 
@@ -39,37 +36,24 @@ export async function POST(req: Request) {
       .eq("id", session.user.id)
       .single();
 
-    // If user doesn't exist, create them
-    if (userError && userError.code === '42P01') {
-      console.error("Users table does not exist. Please create the database tables first.");
-      return Response.json({ error: "Database tables not set up. Please contact the administrator." }, { status: 500 });
-    }
-
-    if (userError || !userData) {
-      console.error("User lookup error:", userError);
-      
-      // Try to create the user if they don't exist
-      if (session.user.email) {
-        const { data: newUser, error: createUserError } = await supabase
-          .from("users")
-          .insert({
-            id: session.user.id,
-            email: session.user.email,
-            name: session.user.name || "Anonymous",
-            password: "google-auth-" + Math.random().toString(36).substring(2, 15), // Placeholder password
-          })
-          .select()
-          .single();
-          
-        if (createUserError) {
-          console.error("Error creating user:", createUserError);
-          return Response.json({ error: "Failed to create user account" }, { status: 500 });
-        }
+    // If user doesn't exist and we have their email, create them
+    if ((userError || !userData) && session.user.email) {
+      const { data: newUser, error: createUserError } = await supabase
+        .from("users")
+        .upsert({
+          id: session.user.id,
+          email: session.user.email,
+          name: session.user.name || "Anonymous",
+        })
+        .select()
+        .single();
         
-        console.log("Created new user:", newUser);
-      } else {
-        return Response.json({ error: "User not found and cannot be created without email" }, { status: 500 });
+      if (createUserError) {
+        console.error("Error creating/updating user:", createUserError);
+        return Response.json({ error: "Failed to create/update user account" }, { status: 500 });
       }
+      
+      console.log("Created/updated user:", newUser);
     }
 
     const { data: party, error: partyError } = await supabase

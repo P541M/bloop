@@ -39,6 +39,12 @@ export default function CreatePartyPage() {
         return;
       }
 
+      if (!session.user || !session.user.id) {
+        setError("User session is invalid. Please log in again.");
+        router.push("/login");
+        return;
+      }
+
       console.log("Submitting party creation with session:", {
         userId: session.user.id,
         userName: session.user.name,
