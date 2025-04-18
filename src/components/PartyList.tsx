@@ -72,7 +72,7 @@ export default function PartyList() {
 
   if (parties.length === 0) {
     return (
-      <div className="card p-6 text-center">
+      <div className="text-center">
         <p className="text-muted-foreground mb-4">You haven't created any parties yet.</p>
         <Link 
           href="/parties/create" 
@@ -90,7 +90,7 @@ export default function PartyList() {
         <Link 
           key={party.id} 
           href={`/parties/${party.id}`}
-          className="card p-4 hover:shadow-md transition-shadow"
+          className="block p-4 border border-gray-200 rounded-md hover:shadow-md transition-shadow"
         >
           <div className="flex justify-between items-center">
             <div>

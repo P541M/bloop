@@ -68,12 +68,12 @@ export default function PartiesPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div>
+          <div className="bg-white rounded-lg shadow-sm p-6">
             <h2 className="text-2xl font-semibold mb-4">Parties You Host</h2>
             <PartyList />
           </div>
 
-          <div>
+          <div className="bg-white rounded-lg shadow-sm p-6">
             <h2 className="text-2xl font-semibold mb-4">Parties You've Joined</h2>
             {loading ? (
               <div className="flex justify-center p-4">
@@ -94,7 +94,7 @@ export default function PartiesPage() {
                 </Link>
               </div>
             ) : joinedParties.length === 0 ? (
-              <div className="card p-6 text-center">
+              <div className="text-center">
                 <p className="text-muted-foreground mb-4">You haven't joined any parties yet.</p>
                 <p className="text-sm text-muted-foreground">
                   Ask a friend for their party code to join!
@@ -106,7 +106,7 @@ export default function PartiesPage() {
                   <Link 
                     key={party.id} 
                     href={`/parties/${party.id}`}
-                    className="card p-4 hover:shadow-md transition-shadow"
+                    className="block p-4 border border-gray-200 rounded-md hover:shadow-md transition-shadow"
                   >
                     <div className="flex justify-between items-center">
                       <div>
