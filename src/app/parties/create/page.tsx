@@ -9,6 +9,9 @@ export default function CreatePartyPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [session, setSession] = useState<any>(null);
+  const [hostParticipates, setHostParticipates] = useState(true);
+  const [playerLimit, setPlayerLimit] = useState<number | null>(null);
+  const [missionHandling, setMissionHandling] = useState<'repeat' | 'generate' | 'custom'>('repeat');
 
   useEffect(() => {
     const checkSession = async () => {
@@ -57,7 +60,10 @@ export default function CreatePartyPage() {
         },
         body: JSON.stringify({
           name: name.trim(),
-          missions: [], // You can add default missions or make this configurable
+          missions: [],
+          hostParticipates,
+          playerLimit,
+          missionHandling,
         }),
       });
 
@@ -118,6 +124,57 @@ export default function CreatePartyPage() {
                 placeholder="Enter party name"
                 disabled={loading}
               />
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium leading-none">
+                Party Settings
+              </label>
+              <div className="space-y-4">
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    id="hostParticipates"
+                    checked={hostParticipates}
+                    onChange={(e) => setHostParticipates(e.target.checked)}
+                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                  <label htmlFor="hostParticipates" className="text-sm">
+                    Participate as host
+                  </label>
+                </div>
+
+                <div className="space-y-2">
+                  <label htmlFor="playerLimit" className="text-sm">
+                    Player Limit (optional)
+                  </label>
+                  <input
+                    id="playerLimit"
+                    type="number"
+                    min="1"
+                    value={playerLimit || ''}
+                    onChange={(e) => setPlayerLimit(e.target.value ? parseInt(e.target.value) : null)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="No limit"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label htmlFor="missionHandling" className="text-sm">
+                    Mission Handling
+                  </label>
+                  <select
+                    id="missionHandling"
+                    value={missionHandling}
+                    onChange={(e) => setMissionHandling(e.target.value as 'repeat' | 'generate' | 'custom')}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="repeat">Repeat missions if needed</option>
+                    <option value="generate">Generate new missions</option>
+                    <option value="custom">Allow custom missions</option>
+                  </select>
+                </div>
+              </div>
             </div>
             
             <button

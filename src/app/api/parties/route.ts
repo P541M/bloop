@@ -18,7 +18,14 @@ export async function POST(req: Request) {
     const session = await getServerSession(authOptions) as Session;
     if (!session) return Response.json({ error: "Unauthorized" }, { status: 401 });
 
-    const { name, missions = [] } = await req.json();
+    const { 
+      name, 
+      missions = [], 
+      hostParticipates = true,
+      playerLimit = null,
+      missionHandling = 'repeat'
+    } = await req.json();
+
     if (!name) {
       return Response.json({ error: "Party name is required" }, { status: 400 });
     }

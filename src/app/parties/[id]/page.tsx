@@ -87,16 +87,36 @@ export default function PartyPage() {
         </div>
 
         <div className="card p-6">
-          <h2 className="text-xl font-semibold mb-4">Party Details</h2>
-          <div className="space-y-2">
-            <p>
+          <h2 className="text-xl font-semibold mb-4">Party Settings</h2>
+          <div className="space-y-4">
+            <div>
+              <span className="font-medium">Host Participation:</span>{" "}
+              <span className="capitalize">
+                {party.host_participates ? "Yes" : "No"}
+              </span>
+            </div>
+            <div>
+              <span className="font-medium">Player Limit:</span>{" "}
+              <span>
+                {party.player_limit ? `${party.player_limit} players` : "No limit"}
+              </span>
+            </div>
+            <div>
+              <span className="font-medium">Mission Handling:</span>{" "}
+              <span className="capitalize">
+                {party.mission_handling === 'repeat' && "Repeat missions if needed"}
+                {party.mission_handling === 'generate' && "Generate new missions"}
+                {party.mission_handling === 'custom' && "Allow custom missions"}
+              </span>
+            </div>
+            <div>
               <span className="font-medium">Status:</span>{" "}
               <span className="capitalize">{party.status}</span>
-            </p>
-            <p>
+            </div>
+            <div>
               <span className="font-medium">Created:</span>{" "}
               {new Date(party.created_at).toLocaleDateString()}
-            </p>
+            </div>
           </div>
         </div>
       </div>
