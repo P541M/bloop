@@ -123,11 +123,8 @@ export default function PartyList() {
         <Link 
           key={party.id} 
           href={`/parties/${party.id}`}
-          className="group relative bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1 border-2 border-purple-100 dark:border-purple-900 overflow-hidden"
+          className="group relative bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1 border-2 border-purple-100 dark:border-purple-900"
         >
-          {/* Background gradient */}
-          <div className="absolute inset-0 bg-gradient-to-br from-purple-50/50 to-pink-50/50 dark:from-purple-900/20 dark:to-pink-900/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-          
           <div className="relative flex flex-col h-full">
             <div className="flex justify-between items-start mb-4">
               <h3 className="font-bold text-lg text-gray-800 dark:text-gray-100 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors line-clamp-1">
@@ -144,7 +141,7 @@ export default function PartyList() {
               </span>
             </div>
             
-            <div className="flex-grow space-y-3">
+            <div className="space-y-2">
               <div className="flex items-center text-gray-600 dark:text-gray-300">
                 <span className="mr-2">🎫</span>
                 <span className="font-mono text-sm">Code: {party.party_code}</span>

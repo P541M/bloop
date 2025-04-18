@@ -130,7 +130,7 @@ export default async function Dashboard() {
                 <Link 
                   key={party.id} 
                   href={`/parties/${party.id}`}
-                  className="card p-4 hover:shadow-md transition-shadow"
+                  className="block p-4 rounded-lg border border-gray-200 hover:shadow-md transition-shadow"
                 >
                   <h3 className="font-medium">{party.name}</h3>
                   <p className="text-sm text-muted-foreground">
@@ -140,7 +140,7 @@ export default async function Dashboard() {
               ))}
             </div>
           ) : (
-            <div className="card p-6 text-center">
+            <div className="p-6 text-center rounded-lg border border-gray-200">
               <p className="text-muted-foreground mb-4">You haven't created any parties yet.</p>
               <Link 
                 href="/parties/create" 
@@ -167,7 +167,7 @@ export default async function Dashboard() {
               ))}
             </div>
           ) : (
-            <div className="card p-6 text-center">
+            <div className="p-6 text-center rounded-lg border border-gray-200">
               <p className="text-muted-foreground">You don't have any active missions.</p>
             </div>
           )}

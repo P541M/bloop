@@ -68,12 +68,12 @@ export default function PartiesPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="bg-white rounded-lg shadow-sm p-6">
+          <div className="rounded-lg shadow-sm p-6">
             <h2 className="text-2xl font-semibold mb-4">Parties You Host</h2>
             <PartyList />
           </div>
 
-          <div className="bg-white rounded-lg shadow-sm p-6">
+          <div className="rounded-lg shadow-sm p-6">
             <h2 className="text-2xl font-semibold mb-4">Parties You've Joined</h2>
             {loading ? (
               <div className="flex justify-center p-4">
