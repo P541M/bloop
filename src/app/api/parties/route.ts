@@ -2,9 +2,20 @@ import { supabase } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/route";
 
+interface User {
+  id: string;
+  name?: string | null;
+  email?: string | null;
+  image?: string | null;
+}
+
+interface Session {
+  user: User;
+}
+
 export async function POST(req: Request) {
-  const session = await getServerSession(authOptions);
-  if (!session) return new Response("Unauthorized", { status: 401 });
+  const session = await getServerSession(authOptions) as Session;
+  if (!session) return Response.json({ error: "Unauthorized" }, { status: 401 });
 
   const { name, missions } = await req.json();
   const partyCode = Math.random().toString(36).substring(2, 8).toUpperCase();
@@ -20,7 +31,7 @@ export async function POST(req: Request) {
     .select()
     .single();
 
-  if (partyError) return new Response("Party creation failed", { status: 500 });
+  if (partyError) return Response.json({ error: "Party creation failed" }, { status: 500 });
 
   const missionInserts = missions.map((desc: string) => ({
     description: desc,
@@ -32,7 +43,7 @@ export async function POST(req: Request) {
     .insert(missionInserts);
 
   if (missionError)
-    return new Response("Mission creation failed", { status: 500 });
+    return Response.json({ error: "Mission creation failed" }, { status: 500 });
 
   return Response.json(party);
 }
