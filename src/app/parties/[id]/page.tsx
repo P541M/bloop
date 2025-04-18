@@ -2,19 +2,30 @@
 import { supabase } from "@/lib/db";
 import { QRCodeCanvas } from "qrcode.react";
 import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 
-export default function PartyPage({ params }: { params: { id: string } }) {
+export default function PartyPage() {
+  const params = useParams();
   const [party, setParty] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  
+  // Get the party ID from the URL params
+  const partyId = params?.id as string;
 
   useEffect(() => {
+    if (!partyId) {
+      setError("Party ID not found");
+      setLoading(false);
+      return;
+    }
+
     async function fetchParty() {
       try {
         const { data, error } = await supabase
           .from("parties")
           .select("*")
-          .eq("id", params.id)
+          .eq("id", partyId)
           .single();
 
         if (error) throw error;
@@ -27,7 +38,7 @@ export default function PartyPage({ params }: { params: { id: string } }) {
     }
 
     fetchParty();
-  }, [params.id]);
+  }, [partyId]);
 
   if (loading) {
     return (
