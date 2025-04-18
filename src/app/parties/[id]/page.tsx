@@ -3,12 +3,15 @@ import { supabase } from "@/lib/db";
 import { QRCodeCanvas } from "qrcode.react";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
+import { getSession } from "next-auth/react";
+import PartySettings from "@/components/PartySettings";
 
 export default function PartyPage() {
   const params = useParams();
   const [party, setParty] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isHost, setIsHost] = useState(false);
   
   // Get the party ID from the URL params
   const partyId = params?.id as string;
@@ -30,6 +33,12 @@ export default function PartyPage() {
 
         if (error) throw error;
         setParty(data);
+        
+        // Check if current user is the host
+        const session = await getSession();
+        if (session?.user?.id) {
+          setIsHost(data.host_id === session.user.id);
+        }
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to load party");
       } finally {
@@ -70,6 +79,8 @@ export default function PartyPage() {
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-2xl mx-auto">
         <h1 className="text-3xl font-bold mb-6">{party.name}</h1>
+        
+        {isHost && <PartySettings party={party} isHost={isHost} />}
         
         <div className="card p-6 mb-6">
           <h2 className="text-xl font-semibold mb-4">Party Code</h2>

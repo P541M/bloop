@@ -2,6 +2,118 @@ import { supabase } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../auth/[...nextauth]/route";
 
+// GET - Fetch a single party
+export async function GET(
+  req: Request,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const { data: party, error } = await supabase
+      .from("parties")
+      .select("*")
+      .eq("id", params.id)
+      .single();
+
+    if (error) {
+      return Response.json({ error: "Party not found" }, { status: 404 });
+    }
+
+    return Response.json(party);
+  } catch (error) {
+    return Response.json({ error: "Failed to fetch party" }, { status: 500 });
+  }
+}
+
+// PUT - Update a party
+export async function PUT(
+  req: Request,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session) return Response.json({ error: "Unauthorized" }, { status: 401 });
+
+    const { name, hostParticipates, playerLimit, missionHandling } = await req.json();
+
+    // Check if user is the host of the party
+    const { data: party, error: partyError } = await supabase
+      .from("parties")
+      .select("host_id")
+      .eq("id", params.id)
+      .single();
+
+    if (partyError || !party) {
+      return Response.json({ error: "Party not found" }, { status: 404 });
+    }
+
+    if (party.host_id !== session.user.id) {
+      return Response.json({ error: "Only the host can update the party" }, { status: 403 });
+    }
+
+    // Update the party
+    const { data, error } = await supabase
+      .from("parties")
+      .update({
+        name,
+        host_participates: hostParticipates,
+        player_limit: playerLimit,
+        mission_handling: missionHandling,
+      })
+      .eq("id", params.id)
+      .select()
+      .single();
+
+    if (error) {
+      return Response.json({ error: "Failed to update party" }, { status: 500 });
+    }
+
+    return Response.json(data);
+  } catch (error) {
+    return Response.json({ error: "Failed to update party" }, { status: 500 });
+  }
+}
+
+// DELETE - Delete a party
+export async function DELETE(
+  req: Request,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session) return Response.json({ error: "Unauthorized" }, { status: 401 });
+
+    // Check if user is the host of the party
+    const { data: party, error: partyError } = await supabase
+      .from("parties")
+      .select("host_id")
+      .eq("id", params.id)
+      .single();
+
+    if (partyError || !party) {
+      return Response.json({ error: "Party not found" }, { status: 404 });
+    }
+
+    if (party.host_id !== session.user.id) {
+      return Response.json({ error: "Only the host can delete the party" }, { status: 403 });
+    }
+
+    // Delete the party
+    const { error } = await supabase
+      .from("parties")
+      .delete()
+      .eq("id", params.id);
+
+    if (error) {
+      return Response.json({ error: "Failed to delete party" }, { status: 500 });
+    }
+
+    return Response.json({ success: true });
+  } catch (error) {
+    return Response.json({ error: "Failed to delete party" }, { status: 500 });
+  }
+}
+
+// POST - Join a party (existing code)
 export async function POST(
   req: Request,
   { params }: { params: { id: string } }
