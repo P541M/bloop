@@ -29,17 +29,17 @@ export default async function RootLayout({
           username={session?.user?.name || undefined} 
         />
         
-        <main className="flex-grow">
+        <main className="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {children}
         </main>
         
-        <footer className="bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 text-white py-8 shadow-lg">
+        <footer className="bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 text-white py-12 shadow-lg mt-auto">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-col md:flex-row justify-between items-center">
-              <div className="mb-4 md:mb-0">
+            <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+              <div>
                 <p className="text-sm">© {new Date().getFullYear()} Bloop - All rights reserved</p>
               </div>
-              <div className="flex space-x-6">
+              <div className="flex space-x-8">
                 <a href="/privacy" className="text-white hover:text-purple-200 text-sm transition-colors">Privacy Policy</a>
                 <a href="/terms" className="text-white hover:text-purple-200 text-sm transition-colors">Terms of Service</a>
                 <a href="/contact" className="text-white hover:text-purple-200 text-sm transition-colors">Contact</a>
